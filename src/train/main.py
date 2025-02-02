@@ -1,6 +1,7 @@
 from train.arguments import Arguments
 from train.preprocess import PreprocessPipeline
 from train.train import TrainPipeline
+from train.fsdp import FSdpPipeline
 
 
 def benchmark(args: Arguments) -> None:
@@ -9,9 +10,15 @@ def benchmark(args: Arguments) -> None:
         print(f"######### Started evaluating {args.model_name} on task {task}")
         dataset = PreprocessPipeline().preprocess_dataset(args, task)
 
-        training_pipeline = TrainPipeline(
-            hulu_args=args, current_task=task, tokenizer_name=args.tokenizer_name
-        )
+        if args.use_fsdp:
+            training_pipeline = FSdpPipeline(
+                hulu_args=args, current_task=task, tokenizer_name=args.tokenizer_name
+            )
+        else:
+            training_pipeline = TrainPipeline(
+                hulu_args=args, current_task=task, tokenizer_name=args.tokenizer_name
+            )
+
         training_pipeline.set_tokenized_datasets(
             train_dataset=dataset["train"],
             dev_dataset=dataset["validation"],
