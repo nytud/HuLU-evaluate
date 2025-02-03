@@ -8,6 +8,7 @@
 - **LoRA (Low-Rank Adaptation)**: Fine-tune models with reduced compute requirements.
 - **Official training scripts**: Provided for training and evaluation.
 - **HuLU Leaderboard**: Submit your results to the HuLU leaderboard.
+- **Fully Sharded Data Parallel**: Shard and paralellize training of models
 
 ## Installation
 
@@ -93,6 +94,8 @@ hulu-evaluate train --model_name <MODEL_NAME> --output_dir <OUTPUT_DIR> --train_
 --lora_alpha: default=16 LoRA alpha parameter
 --lora_dropout: default=0.1 LoRA dropout rate
 --tasks default=["cola", "rte", "wnli", "cb", "sst"] List of tasks to train on
+--use_fsdp: default=False Using FSDP
+--gradient_accumulation_steps: default=1 Set steps for gradient accumulation
 ```
 
 ## The HuLU Benchmark
@@ -106,7 +109,7 @@ HuLU (Hungarian Language Understanding Benchmark Kit) was created on the basis o
 @inproceedings{hatvani2024hulu,
   author    = {Péter Hatvani and Kristóf Varga and Zijian Győző Yang},
   title     = {Evaluation Library for the Hungarian Language Understanding Benchmark (HuLU)},
-  booktitle = {Proceedings of the [Conference Name]},
+  booktitle = {Proceedings of the 21th Hungarian Computational Linguistics Conference},
   year      = {2024},
   address   = {Hungary},
   publisher = {[Publisher Name]},
