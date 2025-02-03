@@ -1,15 +1,15 @@
+import torch
 from datasets import load_dataset
 from transformers import AutoTokenizer
 
 from train.arguments import Arguments
-import torch
 from train.constants import (
     CONJUNCTIONS,
-    TOKENIZER_PARAMETERS,
     HULU_DATASETS,
     IRRELEVANT_COLUMNS,
-    RELEVANT_COLUMNS,
     LABELS,
+    RELEVANT_COLUMNS,
+    TOKENIZER_PARAMETERS,
 )
 
 

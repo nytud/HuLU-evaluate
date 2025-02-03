@@ -1,27 +1,25 @@
+import evaluate
+import numpy as np
 import torch
 from torch import amp, nn
+from torch.optim import AdamW
+from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import (
+    AutoModel,
     AutoModelForSequenceClassification,
     AutoTokenizer,
-    AutoModel,
     get_linear_schedule_with_warmup,
 )
 from transformers.modeling_outputs import (
     MultipleChoiceModelOutput,
     SequenceClassifierOutput,
 )
-from torch.utils.data import DataLoader
-from torch.optim import AdamW
-
 
 from train.arguments import Arguments
+from train.constants import CB_LABELS, CONJUNCTIONS, SST_LABELS
 from train.helper import write_submission
 from train.lora_helper import set_lora
-import evaluate
-import numpy as np
-from train.constants import CB_LABELS, SST_LABELS, CONJUNCTIONS
-
 
 accuracy_metric = evaluate.load("accuracy")
 mcc_metric = evaluate.load("matthews_correlation")
