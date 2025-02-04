@@ -19,10 +19,8 @@ def run_task_standard(task: str, args: Arguments) -> None:
     """
     Runs the training pipeline in single-process (non-distributed) mode.
     """
-    # Preprocess the dataset for the task.
     dataset = PreprocessPipeline().preprocess_dataset(args, task)
 
-    # Create and configure the training pipeline.
     pipeline = TrainPipeline(
         hulu_args=args, current_task=task, tokenizer_name=args.tokenizer_name
     )
@@ -32,7 +30,6 @@ def run_task_standard(task: str, args: Arguments) -> None:
         test_dataset=dataset["test"],
     )
 
-    # Train the model and create a submission.
     trained_model = pipeline.training()
     pipeline.create_submission(trained_model)
 
@@ -42,13 +39,11 @@ def run_task_fsdp(task: str, args: Arguments) -> None:
     Runs the training pipeline using FSDP (distributed training).
     This spawns one process per available CUDA device.
     """
-    # Preprocess the dataset for the task.
     dataset = PreprocessPipeline().preprocess_dataset(args, task)
     world_size = torch.cuda.device_count()
     if world_size < 1:
         raise RuntimeError("FSDP selected but no CUDA devices found.")
 
-    # Spawn one worker per GPU.
     mp.spawn(
         run_worker,
         args=(world_size, args, task, args.tokenizer_name, dataset),
@@ -61,7 +56,6 @@ def benchmark(args: Arguments) -> None:
     """
     For each task specified in the arguments, run the appropriate training pipeline.
     """
-    # Choose the appropriate runner function for the current mode.
     task_runner = run_task_fsdp if args.use_fsdp else run_task_standard
 
     for task in args.tasks:

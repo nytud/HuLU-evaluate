@@ -28,17 +28,14 @@ def run_worker(
     runs the training pipeline, creates the submission,
     and finally cleans up the process group.
     """
-    # Set required environment variables for distributed training.
     os.environ["RANK"] = str(rank)
     os.environ["WORLD_SIZE"] = str(world_size)
     os.environ["MASTER_ADDR"] = "localhost"
     os.environ["MASTER_PORT"] = "12355"
 
-    # Initialize the process group.
     dist.init_process_group(backend="nccl", rank=rank, world_size=world_size)
     torch.cuda.set_device(rank)
 
-    # Create and configure the FSDP training pipeline.
     training_pipeline = FSdpPipeline(hulu_args, current_task, tokenizer_name)
     training_pipeline.set_tokenized_datasets(
         train_dataset=dataset["train"],
@@ -46,11 +43,9 @@ def run_worker(
         test_dataset=dataset["test"],
     )
 
-    # Run training and create submission.
     trained_model = training_pipeline.training()
     training_pipeline.create_submission(trained_model)
 
-    # Clean up the distributed process group.
     dist.destroy_process_group()
 
 
@@ -100,7 +95,6 @@ class FSdpPipeline(TrainPipeline):
                 desc=f"Training Epoch {epoch + 1}/{self.hulu_args.train_epochs}",
                 disable=(dist.get_rank() != 0),
             ):
-                # Move data to the current CUDA device.
                 input_ids = batch["input_ids"].to(torch.cuda.current_device())
                 attention_mask = batch["attention_mask"].to(torch.cuda.current_device())
                 labels = batch["label"].to(torch.cuda.current_device())
@@ -112,7 +106,6 @@ class FSdpPipeline(TrainPipeline):
                         labels=labels,
                     )
 
-                # Backward pass with optional gradient accumulation.
                 if step % gradient_accumulation_steps == 0:
                     if use_fp16:
                         scaler.scale(output.loss).backward()
@@ -128,7 +121,6 @@ class FSdpPipeline(TrainPipeline):
                 correct_preds += (output.logits.argmax(dim=1) == labels).sum().item()
                 step += 1
 
-                # Periodic evaluation on rank 0.
                 if step % num_eval_steps == 0 and dist.get_rank() == 0:
                     torch.cuda.empty_cache()
                     eval_loss, metrics = self.evaluate(model)
@@ -139,7 +131,6 @@ class FSdpPipeline(TrainPipeline):
                         f"Eval F1 = {metrics['f1']}"
                     )
 
-            # End-of-epoch reporting (only rank 0 prints).
             avg_loss = total_loss / len(self.train_loader)
             accuracy = correct_preds / len(self.train_loader.dataset)
             if dist.get_rank() == 0:
