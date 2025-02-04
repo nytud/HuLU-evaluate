@@ -9,7 +9,6 @@ Starting point for fine-tuning language models on HuLU benchmarks.
 
 
 def cli() -> None:
-
     parser = argparse.ArgumentParser(description="HuLU evaluate CLI tool")
 
     parser.add_argument("--config-file", type=str, help="Path to config JSON file")

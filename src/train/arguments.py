@@ -5,7 +5,6 @@ from pydantic import BaseModel, field_validator, model_validator
 
 
 class Arguments(BaseModel):
-
     output_dir: str = "HuluFinetune"
     model_name: str
     tokenizer_name: Optional[str] = None

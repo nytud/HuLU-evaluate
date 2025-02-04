@@ -85,7 +85,6 @@ class TrainPipeline:
         self.train_loader, self.dev_loader, self.test_loader = None, None, None
 
     def collate_fn(self, batch):
-
         for item in batch:
             item["input_ids"] = torch.tensor(item["input_ids"], dtype=torch.long)
             item["attention_mask"] = torch.tensor(
@@ -154,7 +153,6 @@ class TrainPipeline:
         return model
 
     def training(self):
-
         model = self.load_model()
 
         use_fp16 = self.hulu_args.precision == "fp16"
@@ -265,9 +263,10 @@ class TrainPipeline:
         predictions = []
         with torch.no_grad():
             for batch in self.test_loader:
-                input_ids, attention_mask = batch["input_ids"].to(self.device), batch[
-                    "attention_mask"
-                ].to(self.device)
+                input_ids, attention_mask = (
+                    batch["input_ids"].to(self.device),
+                    batch["attention_mask"].to(self.device),
+                )
                 output: MultipleChoiceModelOutput | SequenceClassifierOutput = model(
                     input_ids=input_ids, attention_mask=attention_mask
                 )
