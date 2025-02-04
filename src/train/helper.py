@@ -3,7 +3,6 @@ import os
 
 
 def write_submission(task, predictions_data, output_dir) -> None:
-
     os.makedirs(output_dir, exist_ok=True)
     base_filename = f"{task}_predicted_labels.json"
     predictions_path = os.path.join(output_dir, base_filename)

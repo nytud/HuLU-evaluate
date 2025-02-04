@@ -41,7 +41,7 @@ extras = {
 
 setup(
     name="hulu_evaluate",
-    version="0.0.1",
+    version="0.0.2",
     author="HUN-REN Research Center for Linguistics",
     author_email="varga.kristof@nytud.hun-ren.hu",
     description="Client library to train and evaluate models on the HuLu benchmark.",

@@ -1,27 +1,25 @@
+import torch
 from datasets import load_dataset
 from transformers import AutoTokenizer
 
 from train.arguments import Arguments
-import torch
 from train.constants import (
     CONJUNCTIONS,
-    TOKENIZER_PARAMETERS,
     HULU_DATASETS,
     IRRELEVANT_COLUMNS,
-    RELEVANT_COLUMNS,
     LABELS,
+    RELEVANT_COLUMNS,
+    TOKENIZER_PARAMETERS,
 )
 
 
 class PreprocessPipeline:
-
     def __init__(self):
         self.tokenizer = None
         self.tokenizer_params = None
         self.preprocess_fn = None
 
     def preprocess_dataset(self, arguments: Arguments, task: str):
-
         dataset_name = HULU_DATASETS[task]
 
         dataset = load_dataset(dataset_name)
@@ -38,7 +36,6 @@ class PreprocessPipeline:
         return dataset
 
     def get_preprocess_fn(self, task, tokenizer, tokenizer_params):
-
         def preprocess_example(
             premise, choice1, choice2, question, tokenizer, tokenizer_params
         ):
@@ -85,7 +82,6 @@ class PreprocessPipeline:
         return preprocess_row
 
     def load_tokenizer(self, arguments: Arguments, task: str):
-
         tokenizer = AutoTokenizer.from_pretrained(
             arguments.tokenizer_name, clean_up_tokenization_spaces=True
         )

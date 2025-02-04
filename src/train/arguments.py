@@ -5,7 +5,6 @@ from pydantic import BaseModel, field_validator, model_validator
 
 
 class Arguments(BaseModel):
-
     output_dir: str = "HuluFinetune"
     model_name: str
     tokenizer_name: Optional[str] = None
@@ -21,6 +20,8 @@ class Arguments(BaseModel):
     lora_alpha: int = 16
     lora_dropout: float = 0.1
     tasks: List[str] = ["cola", "rte", "wnli", "cb", "sst", "copa"]
+    use_fsdp: bool = False
+    gradient_accumulation_steps: int = 1
 
     model_config = {"protected_namespaces": ()}
 

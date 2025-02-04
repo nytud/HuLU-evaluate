@@ -44,7 +44,6 @@ def choose_lora_target(model):
 
 
 def set_lora(hulu_args: Arguments, sequente_classification=False, model=None):
-
     target_modules = choose_lora_target(model)
     lora_config = LoraConfig(
         task_type=TaskType.SEQ_CLS if sequente_classification else None,

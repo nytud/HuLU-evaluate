@@ -3,14 +3,12 @@ import argparse
 from train.arguments import Arguments
 from train.main import benchmark
 
-
 __doc__ = """
 Starting point for fine-tuning language models on HuLU benchmarks.
 """
 
 
 def cli() -> None:
-
     parser = argparse.ArgumentParser(description="HuLU evaluate CLI tool")
 
     parser.add_argument("--config-file", type=str, help="Path to config JSON file")
@@ -54,6 +52,18 @@ def cli() -> None:
         default=["cola", "rte", "wnli", "cb", "sst", "copa"],
         help="List of tasks to train on",
     )
+    parser.add_argument(
+        "--use-fsdp",
+        action="store_true",
+        help="Use FSDP for training",
+        default=False,
+    )
+    parser.add_argument(
+        "--gradient-accumulation-steps",
+        type=int,
+        default=1,
+        help="Number of gradient accumulation steps",
+    )
 
     args = parser.parse_args()
 
@@ -75,6 +85,7 @@ def cli() -> None:
             lora_r=args.lora_r,
             lora_alpha=args.lora_alpha,
             lora_dropout=args.lora_dropout,
+            use_fsdp=args.use_fsdp,
             tasks=args.tasks,
         )
 
