@@ -41,7 +41,7 @@ hulu-evaluate <command> [<args>]
 ## Train a Model: Train on HuLU tasks using the train command
 
 ```bash
-hulu-evaluate train --model_name <MODEL_NAME> --output_dir <OUTPUT_DIR> --train_epochs 6 --train_batch 8
+hulu-evaluate --model_name <MODEL_NAME> --output_dir <OUTPUT_DIR> --train_epochs 6 --train_batch 8
 ```
 
 You can submit your results on the hulu.nytud.hu webpage. The results are created by default in the "HuluFinetune" directory.
