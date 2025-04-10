@@ -74,27 +74,27 @@ Main(arguments)
 train - Trains a model on HuLU tasks with specified parameters.
 
 ```bash
-hulu-evaluate train --model_name <MODEL_NAME> --output_dir <OUTPUT_DIR> --train_epochs <EPOCHS>
---model_name: Name of the model to train.
---train_epochs: Number of epochs.
---use_lora: Enable LoRA fine-tuning (optional).
---config_file: Path to config JSON file
---output_dir: Output directory
---model_name: Model name
---tokenizer_name: Tokenizer name (defaults to model_name)
---train_epochs:  default=6 Number of training epochs
---train_batch: default=8 Training batch size
---train_lr: default=2e-05 Learning rate
---train_warmup: default=0 Warmup steps
---train_maxlen: default=256 Max sequence length
---train_seed: default=42 Random seed
+hulu-evaluate --model-name <MODEL_NAME> --output-dir <OUTPUT_DIR> --train-epochs <EPOCHS>
+--model-name: Name of the model to train.
+--train-epochs: Number of epochs.
+--use-lora: Enable LoRA fine-tuning (optional).
+--config-file: Path to config JSON file
+--output-dir: Output directory
+--model-name: Model name
+--tokenizer-name: Tokenizer name (defaults to model_name)
+--train-epochs:  default=6 Number of training epochs
+--train-batch: default=8 Training batch size
+--train-lr: default=2e-05 Learning rate
+--train-warmup: default=0 Warmup steps
+--train-maxlen: default=256 Max sequence length
+--train-seed: default=42 Random seed
 --precision: default="fp32" Precision (e.g., fp16 or fp32)
---use_lora: default=False Use LoRA for training
---lora_r: default=8 LoRA r parameter
---lora_alpha: default=16 LoRA alpha parameter
---lora_dropout: default=0.1 LoRA dropout rate
+--use-lora: default=False Use LoRA for training
+--lora-r: default=8 LoRA r parameter
+--lora-alpha: default=16 LoRA alpha parameter
+--lora-dropout: default=0.1 LoRA dropout rate
 --tasks default=["cola", "rte", "wnli", "cb", "sst"] List of tasks to train on
---use_fsdp: default=False Using FSDP
+--use-fsdp: default=False Using FSDP
 --gradient_accumulation_steps: default=1 Set steps for gradient accumulation
 ```
 
@@ -103,16 +103,26 @@ hulu-evaluate train --model_name <MODEL_NAME> --output_dir <OUTPUT_DIR> --train_
 HuLU (Hungarian Language Understanding Benchmark Kit) was created on the basis of the GLUE and SuperGLUE benchmark databases. The main purpose of HuLU is to enable a standardized evaluation of neural language models in a simple way while also enabling multi-perspective analysis. It also compares the performance of various LMs on various tasks and shares the results with LT professionals in tabular and graphical formats.
 **The tasks and their precise presentation is available on the official [HuLU page](https://hulu.nytud.hu/tasks)**
 
+## Submitting the Results to the HuLU Leaderboard
+
+The official [HuLU page](https://hulu.nytud.hu/tasks) offers an opportunity to validate your results from the training procedure. 
+The path selected with the `--output-path` or it will default to the same folder the process is ran. 
+The created folder is named `finetune_results` and will contain the predictions of the model for the given task e.g.: `cola_predicted_labels.json`. To submit your results you will need this file.
+
+Navigate to the webpage https://hulu.nytud.hu/. Sign up at the top right corner - use google authentication. After successful authorization select `Submission` fill the form and upload the newly created predictions for the given task - one at a time.
+
+After submission you will be informed when your results are presented on the site. Please be patient as all submissions are processed manually.
+
 ## Citing
 
 ```bibtex
 @inproceedings{hatvani2024hulu,
-  author    = {Péter Hatvani and Kristóf Varga and Zijian Győző Yang},
+  author    = {Péter Hatvani, Kristóf Varga and Zijian Győző Yang},
   title     = {Evaluation Library for the Hungarian Language Understanding Benchmark (HuLU)},
   booktitle = {Proceedings of the 21th Hungarian Computational Linguistics Conference},
   year      = {2024},
   address   = {Hungary},
-  publisher = {[Publisher Name]},
+  publisher = {Szegedi Tudományegyetem TTIK, Informatikai Intézet},
   note      = {Affiliations: PPKE Doctoral School of Linguistics, HUN-REN Hungarian Research Center for Linguistics},
   url       = {https://hatvanipeter.hu/},
   email     = {hatvani9823@gmail.com, varga.kristof@nytud.hun-ren.hu, yang.zijian.gyozo@nytud.hun-ren.hu}
